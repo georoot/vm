@@ -1,0 +1,38 @@
+if [ "$1" == 'clone' ]; then
+        echo "Creating new vm clone"
+		pv ~/vm/$2.img > ~/vm/$3.img
+fi
+if [ "$1" == 'create' ]; then
+        echo "Creating new vm clone"
+		pv ~/vm/base.img > ~/vm/$2.img
+fi
+if [ "$1" == 'run' ]; then
+        echo "Executing selected vm clone"
+		qemu-system-x86_64 -hda ~/vm/$2.img -m 2000 $3 
+fi
+if [ "$1" == 'list' ]; then
+        echo "List of available vm"
+		echo "++++++++++++++++++++"
+		cd ~/vm
+		ls -1 | sed -e 's/\..*$//'
+fi
+if [ "$1" == 'boot' ]; then
+		qemu-img create ~/vm/$2.img 10G
+		qemu-system-x86_64 -hda ~/vm/$2.img -boot d -cdrom $3 -m 1000
+fi
+if [ "$1" == 'del' ]; then
+		shred -vuz ~/vm/$2.img
+fi
+if [ "$1" == 'help' ]; then
+		echo "Author : Rahul Bhola"
+		echo "Mail   : me@rahulbhola.in"
+		echo "+++++++++++++++++++++++++++++++"
+		echo ""
+		echo "clone : create new VM from existing machine"
+		echo "create : create new VM"
+		echo "boot   : boot from iso 'vm boot <VmName> <ISO Location>'"
+		echo "run    : run existing VM"
+		echo "list   : list all available VM"
+		echo "del    : delete existing VM"
+fi
+
